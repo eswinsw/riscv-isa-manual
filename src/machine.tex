@@ -3385,6 +3385,108 @@ the PMP check.  The same behavior may manifest for floating-point stores wider
 than XLEN bits (e.g., the FSD instruction in RV32D), even when the store
 address is naturally aligned.
 
+\subsection{Eswin Extended Physical Memory Protection Configuration CSR}
+The Eswin extended physical memory protection configuration are single bit
+that densely packcked into a 32 bit CSR register. For both RV32 and RV64,
+as shown in Table~\ref{pmpcfgext-layout}.
+
+\begin{figure}[h!]
+{\footnotesize
+\begin{center}
+\begin{tabular}{@{}Y@{}Y@{}Y@{}Y@{}Y@{}Y@{}Y@{}Yl}
+\instbitrange{31}{30} &
+\instbitrange{29}{28} &
+\instbitrange{27}{26} &
+\instbitrange{25}{24} &
+\instbitrange{23}{22} &
+\instbitrange{21}{20} &
+\instbitrange{19}{18}&
+\instbitrange{17}{16} & \\
+\cline{1-8}
+\multicolumn{1}{|c|}{pmp15ext} &
+\multicolumn{1}{|c|}{pmp14ext} &
+\multicolumn{1}{|c|}{pmp13ext} &
+\multicolumn{1}{|c|}{pmp12ext} &
+\multicolumn{1}{|c|}{pmp11ext} &
+\multicolumn{1}{|c|}{pmp10ext} &
+\multicolumn{1}{|c|}{pmp9ext} &
+\multicolumn{1}{|c|}{pmp8ext} &
+	\tt pmpcfgext(H) \\
+\cline{1-8}
+2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & \\
+\instbitrange{15}{14} &
+\instbitrange{13}{12} &
+\instbitrange{11}{10} &
+\instbitrange{9}{8} &
+\instbitrange{7}{6} &
+\instbitrange{5}{4} &
+\instbitrange{3}{2} &
+\instbitrange{1}{0} & \\
+\cline{1-8}
+\multicolumn{1}{|c|}{pmp7ext} &
+\multicolumn{1}{c|}{pmp6ext} &
+\multicolumn{1}{c|}{pmp5ext} &
+\multicolumn{1}{c|}{pmp4ext} &
+\multicolumn{1}{c|}{pmp3ext} &
+\multicolumn{1}{c|}{pmp2ext} &
+\multicolumn{1}{c|}{pmp1ext} &
+\multicolumn{1}{c|}{pmp0ext} &
+	\tt pmpcfgext(L) \\
+\cline{1-8}
+2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & \\
+\end{tabular}
+\end{center}
+}
+\vspace{-0.1in}
+\caption{PMP configuration CSR layout.}
+\label{pmpcfgext-layout}
+\end{figure}
+
+
+Figure~\ref{eswin-pmpext} shows the layout of an Extended PMP configuration register. Currently only the T bit is in use.
+
+\begin{figure}[h!]
+{\footnotesize
+\begin{center}
+\begin{tabular}{ c  c }
+\instbit{1} &
+\instbit{0}  \\
+\hline
+\multicolumn{1}{|c|}{0 (\warl)} &
+\multicolumn{1}{c|}{T (\warl)}  \\
+\hline
+1 & 1  \\
+\end{tabular}
+\end{center}
+}
+\vspace{-0.1in}
+\caption{Extended PMP configuration register format.}
+\label{eswin-pmpext}
+\end{figure}
+
+
+The FS and XS fields use the same status encoding as shown in
+Table~\ref{l-t-interaction}, with the four possible status values being
+Off, Initial, Clean, and Dirty.
+
+\begin{table*}[h!]
+\begin{center}
+\begin{tabular}{|r|l|l|}
+\hline
+L  & T & Meaning\\
+\hline
+1 & 0    &  Existing L-bit behavior. T bit is ignored.   \\
+1 & 1    &  Existing L-bit behavior. T bit is ignored.   \\
+0 & 0    &  Existing L-bit behavior. No M-mode PMP.     \\
+0 & 1    &  Only M-mode matching XWR access granted. M-mode exception handler bypass this PMP. \\
+\hline
+\end{tabular}
+\end{center}
+\caption{L-bit and T-bit interaction}
+\label{l-t-interaction}
+\end{table*}
+
+
 \subsection{Physical Memory Protection and Paging}
 \label{pmp-vmem}
 
