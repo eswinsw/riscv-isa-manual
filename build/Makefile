@@ -31,7 +31,8 @@ bibs = $(srcdir)/riscv-spec.bib
 # You shouldn't need to change anything below this
 #=======================================================================
 
-PDFLATEX := TEXINPUTS=$(srcdir): pdflatex -interaction=nonstopmode -halt-on-error
+PDFLATEXBIN := /usr/local/texlive/2020/bin/x86_64-darwin/pdflatex
+PDFLATEX := TEXINPUTS=$(srcdir): $(PDFLATEXBIN) -interaction=nonstopmode -halt-on-error
 BIBTEX := BIBINPUTS=$(srcdir): bibtex
 
 default : pdf
